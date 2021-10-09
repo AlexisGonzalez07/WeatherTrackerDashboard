@@ -33,7 +33,7 @@ function fetchAPI (event) {
         cityName.trim()
     } 
 
-    var apiURL = `api.openweathermap.org/data/2.5/forecast?q=` + cityName + `&appid=` + apiKey;
+    var apiURL = `https://api.openweathermap.org/data/2.5/forecast?q=` + cityName + `&appid=` + apiKey;
     console.log(apiURL)
     fetch(apiURL)
     .then(function (response) {

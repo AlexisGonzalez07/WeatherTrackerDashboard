@@ -1,1 +1,20 @@
 /* Create some space betweeen the "action buttons" */
+
+/* Create space between cards */
+.card {
+    margin-right: 2em;
+    margin-bottom: 5em;
+}
+
+li {
+    margin-bottom: 10px;
+}
+
+.list-group-item {
+    margin-bottom: 10px;
+}
+
+.bottom-card {
+    margin: 5em;
+    padding: 10em;
+}

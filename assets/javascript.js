@@ -1,7 +1,11 @@
 // Declare all my variables I need to interact with
-var userSearchBtn = document.getElementById('search')
-var userSearchTerm = document.getElementById('search-term')
-var apiCity = ""
+var userSearchBtn = document.getElementById('search');
+var userSearchTerm = document.getElementById('search-term');
+var apiCity = "";
+var upperCard = document.getElementById('upper-card')
+var bottomCards = document.getElementById('bottom-card');
+var forecastDays = 5;
+var forecastIndex = 1;
 // When I press the button, I'm going to perform two seperate API searches
 // Need to disect the code to call for the city and get temperature, wind, humidity
 // Need to need a condition for the UV, it's own formula before appending to the card
@@ -19,31 +23,139 @@ var apiCity = ""
 // I'll need a formula to decide on a weather icon and then return the "list element back"
 
 function fetchAPI (event) {
-    event.preventDefault()
-    var apiKey = "137290e1f98143701448952087a7ef29"
-    var element = event.target
-    var cityName = ''
+    event.preventDefault();
+    var apiKey = "137290e1f98143701448952087a7ef29";
+    var element = event.target;
+    var cityName = '';
     if (element.matches('#search')){
-        cityName=userSearchTerm.value
-        console.log(cityName)
-        cityName.trim()
+        cityName=userSearchTerm.value;
+        console.log(cityName);
+        cityName.trim();
     }
     else if (element.matches('button')){
-        cityName = element.value
-        cityName.trim()
+        cityName = element.value;
+        cityName.trim();
     } 
 
-    var apiURL = `https://api.openweathermap.org/data/2.5/forecast?q=` + cityName + `&appid=` + apiKey;
-    console.log(apiURL)
+    var apiURL = `https://api.openweathermap.org/data/2.5/forecast?q=` + cityName + `&units=imperial&appid=` + apiKey;
+    console.log(apiURL);
     fetch(apiURL)
     .then(function (response) {
-        console.log(response)
+        console.log(response);
         return response.json();
       })
       .then(function (data) {
         console.log(data);
+        populatePage(data);
+        // populateBottom(data)
       });
 }
+
+function populatePage (search) {
+  console.log(search);
+  cardCity= search.city.name
+  console.log(cardCity)
+  var cardDate =''
+  var cardIcon =''
+  var cardTemperature =''
+  var cardWind =''
+  var cardHumidity=''
+  var cardUV=''
+
+  var upperBlock = document.createElement('div');
+  upperBlock.className = 'card';
+  // upperBlock.classList.add('col-5', 'col-md-3', 'col-lg-2')
+  // Set up the card header
+  var topcardHeader = document.createElement('div')
+  topcardHeader.classList.add('card-header')
+  var topcardTitle = document.createElement('h3')
+  cardDate = search.list[0].dt_txt;
+  var trimmedDate =cardDate.substring(0,10)
+  topcardTitle.textContent=search.city.name+' '+trimmedDate;
+  topcardHeader.append(topcardTitle);
+  // Set up the card footer
+  var topcardFooter = document.createElement('div')
+  topcardFooter.classList.add('card-body')
+  // Create list and populate
+  var topcardList = document.createElement('ul')
+  var toptemperatureElement = document.createElement('li')
+  toptemperatureElement.textContent='Temp: ' +search.list[0].main.temp+ ' Fahrenheit'
+  var topwindElement = document.createElement('li')
+  topwindElement.textContent='Wind: '+search.list[0].wind.speed+ ' MPH'
+  var tophumidityElement = document.createElement('li')
+  tophumidityElement.textContent='Humidity: '+search.list[0].main.humidity+' %'
+  var topUVElement = document.createElement('li')
+  topUVElement.textContent='Humidity: '+search.list[0].main.humidity+' %'
+  topcardList.append(toptemperatureElement)
+  topcardList.append(topwindElement)
+  topcardList.append(tophumidityElement)
+  topcardList.append(topUVElement)
+  topcardFooter.append(topcardList)
+  // Append header and footer to card
+  upperBlock.append(topcardHeader)
+  upperBlock.append(topcardFooter)
+  // Append card to upper Div
+  upperCard.append(upperBlock)
+
+  // Set up the lower card so we move to index 1 in responses immediately
+  for (var i = forecastIndex; i < forecastDays+1; i++) {
+    // Set up card div
+    var resultBlock = document.createElement('div');
+    resultBlock.className = 'card';
+    resultBlock.classList.add('col-5', 'col-md-3', 'col-lg-2')
+    // Set up the card header
+    var cardHeader = document.createElement('div')
+    cardHeader.classList.add('card-header')
+    var cardTitle = document.createElement('h3')
+    cardDate = search.list[i].dt_txt;
+    var trimmedDate =cardDate.substring(0,10)
+    cardTitle.textContent= trimmedDate;
+    cardHeader.append(cardTitle);
+    // Set up the card footer
+    var cardFooter = document.createElement('div')
+    cardFooter.classList.add('card-body')
+    // Create list and populate
+    var cardList = document.createElement('ul')
+    var iconElement = document.createElement('li')
+    iconElement.textContent='Icon: ' +search.list[i].weather[0].icon
+    console.log(iconElement)
+    var temperatureElement = document.createElement('li')
+    temperatureElement.textContent='Temp: ' +search.list[i].main.temp+ ' Fahrenheit'
+    var windElement = document.createElement('li')
+    windElement.textContent='Wind: '+search.list[i].wind.speed+ ' MPH'
+    var humidityElement = document.createElement('li')
+    humidityElement.textContent='Humidity: '+search.list[i].main.humidity+' %'
+    cardList.append(iconElement)
+    cardList.append(temperatureElement)
+    cardList.append(windElement)
+    cardList.append(humidityElement)
+    cardFooter.append(cardList)
+    // Append header and footer to card
+    resultBlock.append(cardHeader)
+    resultBlock.append(cardFooter)
+    // Append card to upper Div
+    bottomCards.append(resultBlock)
+    // resultBlock.classList.add('col', 's12', 'm4', 'l3', 'card-background'); MAY SCRAP
+    // console.log(resultBlock);
+    // resultBlock.textContent = "Hello I'm Block" + i
+    // resultBlock.id = "block" + i;
+    // console.log(resultBlock);
+    // Push each finished block into an array
+    // resultBlockArray.push(resultBlock);
+    // console.log(resultBlockArray);
+    // Attach each result to the row
+    // rowGrid.append(resultBlock); YO
+    // console.log(rowGrid);
+    // Append rows to the grid
+    // resultsGrid.append(rowGrid); YO
+    // console.log(resultsGrid);
+  };
+  // Append grid to the page
+  // resultsLayout.append(resultsGrid);
+  // Call function to fill each result
+  // getResultsInfo();
+}
+
 
 
 userSearchBtn.addEventListener('click', fetchAPI)

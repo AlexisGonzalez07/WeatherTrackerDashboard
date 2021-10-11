@@ -1,11 +1,18 @@
 // Declare all my variables I need to interact with
 var userSearchBtn = document.getElementById('search');
 var userSearchTerm = document.getElementById('search-term');
+var pastCities = document.getElementsByTagName('button');
+console.log(pastCities)
 var apiCity = "";
 var upperCard = document.getElementById('upper-card')
 var bottomCards = document.getElementById('bottom-card');
 var forecastDays = 5;
 var forecastIndex = 1;
+var longitude = '';
+var latitude = '';
+var cities = [];
+var uv=''
+var apiKey = "137290e1f98143701448952087a7ef29";
 // When I press the button, I'm going to perform two seperate API searches
 // Need to disect the code to call for the city and get temperature, wind, humidity
 // Need to need a condition for the UV, it's own formula before appending to the card
@@ -24,7 +31,6 @@ var forecastIndex = 1;
 
 function fetchAPI (event) {
     event.preventDefault();
-    var apiKey = "137290e1f98143701448952087a7ef29";
     var element = event.target;
     var cityName = '';
     if (element.matches('#search')){
@@ -46,21 +52,41 @@ function fetchAPI (event) {
       })
       .then(function (data) {
         console.log(data);
+        var longitude = data.city.coord.lon;
+        console.log(longitude);
+        var latitude = data.city.coord.lat;
+        console.log(latitude)
+        uvAPI(longitude,latitude);
+      // return UV Value
         populatePage(data);
         // populateBottom(data)
       });
 }
 
-function populatePage (search) {
+function uvAPI (long,lat) {
+  console.log(long);
+  console.log(lat);
+
+  var uvURL = `https://api.openweathermap.org/data/2.5/onecall?lat=` + lat +`&lon=`+long+ `&exclude=hourly,daily&appid=` + apiKey;
+  console.log(uvURL);
+  fetch(uvURL)
+  .then(function (answer) {
+      console.log(answer);
+      return answer.json();
+    })
+    .then(function (onecall) {
+      console.log("this the one call:")
+      console.log(onecall);
+      uv = onecall.current.uvi
+    });
+}
+
+function populatePage (search,uvText) {
   console.log(search);
   cardCity= search.city.name
   console.log(cardCity)
+  console.log(uvText)
   var cardDate =''
-  var cardIcon =''
-  var cardTemperature =''
-  var cardWind =''
-  var cardHumidity=''
-  var cardUV=''
 
   var upperBlock = document.createElement('div');
   upperBlock.className = 'card';
@@ -79,13 +105,13 @@ function populatePage (search) {
   // Create list and populate
   var topcardList = document.createElement('ul')
   var toptemperatureElement = document.createElement('li')
-  toptemperatureElement.textContent='Temp: ' +search.list[0].main.temp+ ' Fahrenheit'
+  toptemperatureElement.textContent='Temp: ' +search.list[0].main.temp+ ' \u00B0F'
   var topwindElement = document.createElement('li')
   topwindElement.textContent='Wind: '+search.list[0].wind.speed+ ' MPH'
   var tophumidityElement = document.createElement('li')
   tophumidityElement.textContent='Humidity: '+search.list[0].main.humidity+' %'
   var topUVElement = document.createElement('li')
-  topUVElement.textContent='Humidity: '+search.list[0].main.humidity+' %'
+  topUVElement.textContent='UV Index: '+ uv
   topcardList.append(toptemperatureElement)
   topcardList.append(topwindElement)
   topcardList.append(tophumidityElement)
@@ -120,7 +146,7 @@ function populatePage (search) {
     iconElement.textContent='Icon: ' +search.list[i].weather[0].icon
     console.log(iconElement)
     var temperatureElement = document.createElement('li')
-    temperatureElement.textContent='Temp: ' +search.list[i].main.temp+ ' Fahrenheit'
+    temperatureElement.textContent='Temp: ' +search.list[i].main.temp+ ' \u00B0F'
     var windElement = document.createElement('li')
     windElement.textContent='Wind: '+search.list[i].wind.speed+ ' MPH'
     var humidityElement = document.createElement('li')

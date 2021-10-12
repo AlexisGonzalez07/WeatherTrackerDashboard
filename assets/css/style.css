@@ -1,7 +1,13 @@
+/* Style body */
+body {
+    font-family:sans-serif;
+}
 /* Style the header*/
 .jumbotron {
     background-color: paleturquoise;
     color: black;
+    margin-bottom:2px;
+    border-bottom:black 10px;
 }
 /* Create some space betweeen the "action buttons" */
 
@@ -26,8 +32,8 @@ li {
 
 /* Style the cards */
 .card {
-    background-color: aliceblue;
-    color:white
+    background-color: peachpuff;
+    color:white;
 }
 
 .card-header {
@@ -35,7 +41,16 @@ li {
 }
 .card-body{
     background-color: peachpuff;
+    color: black;
 }
+
+.solo-cards-title{
+padding: 0px 20px;
+}
+
+h3 {
+    font-size: 18px;
+    }
 
 /* Give background to main container */
 .container-fluid{
@@ -49,4 +64,7 @@ li {
 
 .list-group-item {
     background-color: aliceblue;
+}
+#bottom-card {
+    padding-left: 35px;
 }

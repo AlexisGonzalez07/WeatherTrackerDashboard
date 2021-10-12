@@ -144,7 +144,7 @@ function populatePage (search,uvText) {
     resultBlock.classList.add('col-5', 'col-md-3', 'col-lg-2')
     // Set up the card header
     var cardHeader = document.createElement('div')
-    cardHeader.classList.add('card-header')
+    cardHeader.classList.add('card-header', 'solo-cards-title')
     var cardTitle = document.createElement('h3')
     cardDate = search.list[i].dt_txt;
     var trimmedDate =cardDate.substring(0,10)

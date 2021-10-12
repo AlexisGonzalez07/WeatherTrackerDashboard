@@ -14,6 +14,7 @@ var latitude = '';
 var cities = [];
 var uv=''
 var apiKey = "137290e1f98143701448952087a7ef29";
+var uvArray =[]
 // When I press the button, I'm going to perform two seperate API searches
 // Need to disect the code to call for the city and get temperature, wind, humidity
 // Need to need a condition for the UV, it's own formula before appending to the card
@@ -32,6 +33,7 @@ var apiKey = "137290e1f98143701448952087a7ef29";
 
 function fetchAPI (event) {
   event.preventDefault();
+  uvArray.splice(0,uvArray.length)
   upperCard.innerHTML=''
   bottomCards.innerHTML=''
     var element = event.target;
@@ -62,18 +64,16 @@ function fetchAPI (event) {
         console.log(longitude);
         var latitude = data.city.coord.lat;
         console.log(latitude)
-        uvAPI(longitude,latitude);
-      // return UV Value
-        populatePage(data);
-        // populateBottom(data)
-      });
+        uvAPI(longitude,latitude)
+        return data
+      })
 }
 
 function uvAPI (long,lat) {
   console.log(long);
   console.log(lat);
 
-  var uvURL = `https://api.openweathermap.org/data/2.5/onecall?lat=` + lat +`&lon=`+long+ `&exclude=hourly,daily&appid=` + apiKey;
+  var uvURL = `https://api.openweathermap.org/data/2.5/onecall?lat=` + lat +`&lon=`+long+ `&exclude=minutely,hourly&appid=` + apiKey;
   console.log(uvURL);
   fetch(uvURL)
   .then(function (answer) {
@@ -83,15 +83,20 @@ function uvAPI (long,lat) {
     .then(function (onecall) {
       console.log("this the one call:")
       console.log(onecall);
-      uv = onecall.current.uvi
+      // uv = onecall.current.uvi
+      // console.log("This is uv:" + uv)
+      // uvArray.push(uv)
+      populatePage(onecall)
     });
 }
 
-function populatePage (search,uvText) {
+
+function populatePage (search) {
+  console.log(uvArray)
   console.log(search);
   cardCity= search.city.name
   console.log(cardCity)
-  console.log(uvText)
+  // console.log(uvText)
   var cardDate =''
 
   // Set up the upper card
@@ -120,8 +125,8 @@ function populatePage (search,uvText) {
   topUVElement.textContent='UV Index: '
   var uvElement = document.createElement('span')
   uvElement.classList.add('uv-index')
-  uvElement.textContent = "UV Value Here"
-  uvElement.value = uv
+  uvElement.textContent = uvArray[0]
+  uvElement.value = uvArray[0]
   console.log(uvElement.value)
   if (uvElement.value <=2){
     uvElement.setAttribute('style','background-color: green')

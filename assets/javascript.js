@@ -2,6 +2,7 @@
 var userSearchBtn = document.getElementById('search');
 var userSearchTerm = document.getElementById('search-term');
 var pastCities = document.getElementsByTagName('button');
+var storageList = document.getElementById('storage-list')
 console.log(pastCities)
 var apiCity = "";
 var upperCard = document.getElementById('upper-card')
@@ -30,13 +31,18 @@ var apiKey = "137290e1f98143701448952087a7ef29";
 // I'll need a formula to decide on a weather icon and then return the "list element back"
 
 function fetchAPI (event) {
-    event.preventDefault();
+  event.preventDefault();
+  upperCard.innerHTML=''
+  bottomCards.innerHTML=''
     var element = event.target;
     var cityName = '';
     if (element.matches('#search')){
         cityName=userSearchTerm.value;
+        cities.push(cityName);
         console.log(cityName);
         cityName.trim();
+        storeCities();
+        renderCities()
     }
     else if (element.matches('button')){
         cityName = element.value;
@@ -88,9 +94,9 @@ function populatePage (search,uvText) {
   console.log(uvText)
   var cardDate =''
 
+  // Set up the upper card
   var upperBlock = document.createElement('div');
   upperBlock.className = 'card';
-  // upperBlock.classList.add('col-5', 'col-md-3', 'col-lg-2')
   // Set up the card header
   var topcardHeader = document.createElement('div')
   topcardHeader.classList.add('card-header')
@@ -177,6 +183,37 @@ function populatePage (search,uvText) {
   };
 }
 
+function storeCities() {
+  // Stringify and set key in localStorage to todos array
+  localStorage.setItem("todos", JSON.stringify(cities));
+}
 
+function renderCities() {
+    storageList.innerHTML='';
 
+    for (let i=0; i < cities.length || i <5; i++) {
+      var city = cities[i]
+      var listButton = document.createElement('button')
+      listButton.textContent=city;
+      listButton.value=city;
+      listButton.classList.add('list-group-item','list-group-item-action')
+      storageList.appendChild(listButton)
+    }
+}
+
+function init() {
+  var storedCities = JSON.parse(localStorage.getItem('cities'))
+
+  if (storedCities !== null) {
+    cities=storedCities;
+  }
+  renderCities()
+}
+
+// Run init function
+init();
+
+// Click functions at bottom of Javascritp
 userSearchBtn.addEventListener('click', fetchAPI)
+
+storageList.addEventListener('click', fetchAPI)

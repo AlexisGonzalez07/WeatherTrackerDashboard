@@ -1,3 +1,8 @@
+/* Style the header*/
+.jumbotron {
+    background-color: paleturquoise;
+    color: black;
+}
 /* Create some space betweeen the "action buttons" */
 
 /* Create space between cards */
@@ -17,4 +22,31 @@ li {
 .bottom-card {
     margin: 5em;
     padding: 10em;
+}
+
+/* Style the cards */
+.card {
+    background-color: aliceblue;
+    color:white
+}
+
+.card-header {
+    background-color: navy;
+}
+.card-body{
+    background-color: peachpuff;
+}
+
+/* Give background to main container */
+.container-fluid{
+    background-color: paleturquoise;
+}
+
+/* Give styling to list-group with local storage buttons */
+#button-list {
+    background-color: peachpuff;
+}
+
+.list-group-item {
+    background-color: aliceblue;
 }

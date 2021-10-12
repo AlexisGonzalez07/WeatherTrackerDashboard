@@ -111,7 +111,20 @@ function populatePage (search,uvText) {
   var tophumidityElement = document.createElement('li')
   tophumidityElement.textContent='Humidity: '+search.list[0].main.humidity+' %'
   var topUVElement = document.createElement('li')
-  topUVElement.textContent='UV Index: '+ uv
+  topUVElement.textContent='UV Index: '
+  var uvElement = document.createElement('span')
+  uvElement.classList.add('uv-index')
+  uvElement.textContent = "UV Value Here"
+  uvElement.value = uv
+  console.log(uvElement.value)
+  if (uvElement.value <=2){
+    uvElement.setAttribute('style','background-color: green')
+  } else  if (uvElement.value >2 && uvElement.value <=5){
+    uvElement.setAttribute('style','background-color: yellow')
+  } else {
+    uvElement.setAttribute('style', 'background-color: red')
+  }
+  topUVElement.append(uvElement)
   topcardList.append(toptemperatureElement)
   topcardList.append(topwindElement)
   topcardList.append(tophumidityElement)
@@ -161,25 +174,7 @@ function populatePage (search,uvText) {
     resultBlock.append(cardFooter)
     // Append card to upper Div
     bottomCards.append(resultBlock)
-    // resultBlock.classList.add('col', 's12', 'm4', 'l3', 'card-background'); MAY SCRAP
-    // console.log(resultBlock);
-    // resultBlock.textContent = "Hello I'm Block" + i
-    // resultBlock.id = "block" + i;
-    // console.log(resultBlock);
-    // Push each finished block into an array
-    // resultBlockArray.push(resultBlock);
-    // console.log(resultBlockArray);
-    // Attach each result to the row
-    // rowGrid.append(resultBlock); YO
-    // console.log(rowGrid);
-    // Append rows to the grid
-    // resultsGrid.append(rowGrid); YO
-    // console.log(resultsGrid);
   };
-  // Append grid to the page
-  // resultsLayout.append(resultsGrid);
-  // Call function to fill each result
-  // getResultsInfo();
 }
 
 

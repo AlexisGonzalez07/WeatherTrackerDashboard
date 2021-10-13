@@ -189,14 +189,14 @@ function populatePage (search) {
 }
 
 function storeCities() {
-  // Stringify and set key in localStorage to todos array
-  localStorage.setItem("todos", JSON.stringify(cities));
+  // Stringify and set key in localStorage to cities array
+  localStorage.setItem("cities", JSON.stringify(cities));
 }
 
 function renderCities() {
     storageList.innerHTML='';
 
-    for (let i=0; i < cities.length || i <5; i++) {
+    for (let i=0; i < cities.length; i++) {
       var city = cities[i]
       var listButton = document.createElement('button')
       listButton.textContent=city;

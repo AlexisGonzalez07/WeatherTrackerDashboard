@@ -15,6 +15,7 @@ var cities = [];
 var uv=''
 var apiKey = "137290e1f98143701448952087a7ef29";
 var uvArray =[]
+var cityName = '';
 // When I press the button, I'm going to perform two seperate API searches
 // Need to disect the code to call for the city and get temperature, wind, humidity
 // Need to need a condition for the UV, it's own formula before appending to the card
@@ -37,7 +38,6 @@ function fetchAPI (event) {
   upperCard.innerHTML=''
   bottomCards.innerHTML=''
     var element = event.target;
-    var cityName = '';
     if (element.matches('#search')){
         cityName=userSearchTerm.value;
         cities.push(cityName);
@@ -73,7 +73,7 @@ function uvAPI (long,lat) {
   console.log(long);
   console.log(lat);
 
-  var uvURL = `https://api.openweathermap.org/data/2.5/onecall?lat=` + lat +`&lon=`+long+ `&exclude=minutely,hourly&appid=` + apiKey;
+  var uvURL = `https://api.openweathermap.org/data/2.5/onecall?lat=` + lat +`&lon=`+long+ `&units=imperial&exclude=minutely,hourly&appid=` + apiKey;
   console.log(uvURL);
   fetch(uvURL)
   .then(function (answer) {
@@ -94,8 +94,8 @@ function uvAPI (long,lat) {
 function populatePage (search) {
   console.log(uvArray)
   console.log(search);
-  cardCity= search.city.name
-  console.log(cardCity)
+  // cardCity = search.city.name
+  console.log(cityName)
   // console.log(uvText)
   var cardDate =''
 
@@ -106,9 +106,9 @@ function populatePage (search) {
   var topcardHeader = document.createElement('div')
   topcardHeader.classList.add('card-header')
   var topcardTitle = document.createElement('h3')
-  cardDate = search.list[0].dt_txt;
+  // cardDate = search.list[0].dt_txt;
   var trimmedDate =cardDate.substring(0,10)
-  topcardTitle.textContent=search.city.name+' '+trimmedDate;
+  // topcardTitle.textContent=search.city.name+' '+trimmedDate;
   topcardHeader.append(topcardTitle);
   // Set up the card footer
   var topcardFooter = document.createElement('div')
@@ -116,17 +116,17 @@ function populatePage (search) {
   // Create list and populate
   var topcardList = document.createElement('ul')
   var toptemperatureElement = document.createElement('li')
-  toptemperatureElement.textContent='Temp: ' +search.list[0].main.temp+ ' \u00B0F'
+  toptemperatureElement.textContent='Temp: ' +search.daily[0].temp.day+ ' \u00B0F'
   var topwindElement = document.createElement('li')
-  topwindElement.textContent='Wind: '+search.list[0].wind.speed+ ' MPH'
+  topwindElement.textContent='Wind: '+search.daily[0].wind_speed+ ' MPH'
   var tophumidityElement = document.createElement('li')
-  tophumidityElement.textContent='Humidity: '+search.list[0].main.humidity+' %'
+  tophumidityElement.textContent='Humidity: '+search.daily[0].humidity+' %'
   var topUVElement = document.createElement('li')
   topUVElement.textContent='UV Index: '
   var uvElement = document.createElement('span')
   uvElement.classList.add('uv-index')
-  uvElement.textContent = uvArray[0]
-  uvElement.value = uvArray[0]
+  uvElement.textContent = search.daily[0].uvi
+  uvElement.value = search.daily[0].uvi
   console.log(uvElement.value)
   if (uvElement.value <=2){
     uvElement.setAttribute('style','background-color: green')
@@ -157,7 +157,7 @@ function populatePage (search) {
     var cardHeader = document.createElement('div')
     cardHeader.classList.add('card-header', 'solo-cards-title')
     var cardTitle = document.createElement('h3')
-    cardDate = search.list[i].dt_txt;
+    // cardDate = search.list[i].dt_txt;
     var trimmedDate =cardDate.substring(0,10)
     cardTitle.textContent= trimmedDate;
     cardHeader.append(cardTitle);
@@ -167,14 +167,14 @@ function populatePage (search) {
     // Create list and populate
     var cardList = document.createElement('ul')
     var iconElement = document.createElement('li')
-    iconElement.textContent='Icon: ' +search.list[i].weather[0].icon
+    iconElement.textContent='Icon: ' +search.daily[i].temp.day
     console.log(iconElement)
     var temperatureElement = document.createElement('li')
-    temperatureElement.textContent='Temp: ' +search.list[i].main.temp+ ' \u00B0F'
+    temperatureElement.textContent='Temp: ' +search.daily[i].temp.day+ ' \u00B0F'
     var windElement = document.createElement('li')
-    windElement.textContent='Wind: '+search.list[i].wind.speed+ ' MPH'
+    windElement.textContent='Wind: ' +search.daily[i].wind_speed+ ' MPH'
     var humidityElement = document.createElement('li')
-    humidityElement.textContent='Humidity: '+search.list[i].main.humidity+' %'
+    humidityElement.textContent='Humidity: '+search.daily[i].humidity+' %'
     cardList.append(iconElement)
     cardList.append(temperatureElement)
     cardList.append(windElement)

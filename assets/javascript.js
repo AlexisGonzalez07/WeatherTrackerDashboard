@@ -16,6 +16,7 @@ var uv=''
 var apiKey = "137290e1f98143701448952087a7ef29";
 var uvArray =[]
 var cityName = '';
+
 // When I press the button, I'm going to perform two seperate API searches
 // Need to disect the code to call for the city and get temperature, wind, humidity
 // Need to need a condition for the UV, it's own formula before appending to the card
@@ -106,9 +107,7 @@ function populatePage (search) {
   var topcardHeader = document.createElement('div')
   topcardHeader.classList.add('card-header')
   var topcardTitle = document.createElement('h3')
-  // cardDate = search.list[0].dt_txt;
-  var trimmedDate =cardDate.substring(0,10)
-  // topcardTitle.textContent=search.city.name+' '+trimmedDate;
+  topcardTitle.innerHTML =cityName +' ' + moment().format("MMM Do YY");  
   topcardHeader.append(topcardTitle);
   // Set up the card footer
   var topcardFooter = document.createElement('div')
@@ -157,9 +156,16 @@ function populatePage (search) {
     var cardHeader = document.createElement('div')
     cardHeader.classList.add('card-header', 'solo-cards-title')
     var cardTitle = document.createElement('h3')
-    // cardDate = search.list[i].dt_txt;
-    var trimmedDate =cardDate.substring(0,10)
-    cardTitle.textContent= trimmedDate;
+    // cardTitle.innerHTML = moment().format("MMM Do YY");   
+    var x=  search.daily[i].dt * 1000
+    let dateObj = new Date(x)
+    let obj = JSON.stringify(dateObj)
+    console.log(typeof dateObj)
+    console.log(obj)
+    console.log(obj.slice(3,11))
+    cardTitle.innerHTML = obj.slice(1,11)
+    // var trimmedDate =cardDate.substring(0,10)
+    // cardTitle.textContent= trimmedDate;
     cardHeader.append(cardTitle);
     // Set up the card footer
     var cardFooter = document.createElement('div')

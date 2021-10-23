@@ -40,4 +40,4 @@ This project's code for handling local storage is incomplete, so any input or su
 ## Questions <a name='questions'></a>
 Feel free to email me at: alexis.gonzalez07@gmail.com
 
-Visit my Github profile at: [Alex Gonzalez Github](www.github.com/AlexisGonzalez07)
+Visit my Github profile at: [Alex Gonzalez Github](https://www.github.com/AlexisGonzalez07)
